@@ -1,0 +1,35 @@
+{
+  "name": "calebsmithdev/wp-storybook",
+  "description": "Add Storybook and generate stories for your WordPress theme.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Caleb Smith",
+          "email": "caleb@caleb-smith.dev"
+      }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+      "psr-4": {"WpStorybook\\": "src/"}
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "compose/installers": true
+    },
+    "platform": {
+      "php": "8.0"
+    }
+  },
+  "require": {
+    "php": "^8.0"
+  },
+  "require-dev": {
+    "php-stubs/acf-pro-stubs": "^5.12",
+    "php-stubs/wordpress-stubs": "^6.0",
+    "symfony/var-dumper": "^5.4"
+  }
+}
