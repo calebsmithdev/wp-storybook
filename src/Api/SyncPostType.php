@@ -31,12 +31,7 @@ class SyncPostType
         register_rest_route('wp-storybook/sync', 'export', array(
             'methods'  => WP_REST_Server::READABLE,
             'callback' => [$this, 'get_export'],
-            'permission_callback' => function () {
-                if (WP_DEBUG) {
-                    return true;
-                }
-                return current_user_can('update_core');
-            }
+            'permission_callback' => '__return_true',
         ));
     }
 
