@@ -25,7 +25,8 @@
     }
   },
   "require": {
-    "php": "^8.0"
+    "php": "^8.0",
+    "guzzlehttp/guzzle": "^7.0"
   },
   "require-dev": {
     "php-stubs/acf-pro-stubs": "^5.12",

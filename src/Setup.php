@@ -6,6 +6,8 @@ use WpStorybook\AcfBlocks\Stories;
 use WpStorybook\Api\Acf;
 use WpStorybook\Api\SyncPostType;
 use WpStorybook\Cli\StorybookCommand;
+use WpStorybook\Pages\AdminPage;
+use WpStorybook\Pages\SyncSettingsPage;
 use WpStorybook\PostTypes\StoryViewer;
 
 /**
@@ -60,6 +62,9 @@ class Setup
         }
 
         (new StorybookCommand());
+
+        (new SyncSettingsPage())->init();
+        (new AdminPage())->init();
 
         // TODO: Need an IF check if can create ACF stories. This may not be needed if we move the http function.
         (new Stories())->init();
