@@ -10,8 +10,17 @@ class StorybookCommand
 {
     public function acf()
     {
-        (new AcfStories())->create_stories_for_all_blocks();
-        \WP_CLI::log('ACF stories have been generated.');
+        $allowCreateStories = get_option('wpsb_create_acf_stories');
+        if (!$allowCreateStories) {
+            return \WP_CLI::log('You have disabled ACF Stories.');
+        }
+
+        if (class_exists('ACF')) {
+            (new AcfStories())->create_stories_for_all_blocks();
+            \WP_CLI::log('ACF stories have been generated.');
+        } else {
+            \WP_CLI::log('You must have ACF installed to use this command.');
+        }
     }
 
     public function admin_stories()
