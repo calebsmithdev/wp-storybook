@@ -7,7 +7,6 @@
 
 namespace WpStorybook\Pages;
 
-use WpStorybook\Api\SyncPostType;
 use GuzzleHttp\Client;
 
 class SyncSettingsPage
@@ -43,15 +42,12 @@ class SyncSettingsPage
         if (isset($_POST['submit'])) {
             $site_url = $_POST['sync_sb_stories_settings']['site_url'];
             $site_url = rtrim($site_url, "/");
-            $client = new Client([
-                'base_uri' => $site_url,
-            ]);
-            $response = $client->request('GET', '/wp-json/wp-storybook/sync/export');
-            if (!$response->getBody()) {
+            $response = wp_remote_get($site_url . '/wp-json/wp-storybook/sync/export');
+            if (is_wp_error($response) || (200 != wp_remote_retrieve_response_code($response))) {
                 return;
             }
 
-            $exported_data = json_decode($response->getBody(), true);
+            $exported_data = json_decode($response['body'], true);
             $this->import_data($exported_data);
         }
 ?>
