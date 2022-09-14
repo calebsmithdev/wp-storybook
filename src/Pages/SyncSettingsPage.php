@@ -29,11 +29,11 @@ class SyncSettingsPage
     function cpt_menu_addition()
     {
         add_submenu_page(
-            'edit.php?post_type=wp_stories',
-            __('Sync SB Stories', 'wp_storybook'),
-            __('Sync SB Stories', 'wp_storybook'),
+            "edit.php?post_type={$this->postTypeSlug}",
+            __('Import SB Stories', 'wp_storybook'),
+            __('Import SB Stories', 'wp_storybook'),
             'manage_options',
-            'wp_storybook_sync',
+            'wp_storybook_import',
             [$this, 'storybook_page']
         );
     }
@@ -56,7 +56,7 @@ class SyncSettingsPage
         }
 ?>
         <div class="wrap">
-            <h1>Sync StoryBook Stories</h1>
+            <h1>Import StoryBook Stories</h1>
             <div>
                 <h2 style="margin-top: 20px;">Settings </h2>
                 <form method="post">
