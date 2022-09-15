@@ -49,35 +49,35 @@ class ClassStories
 
         foreach ($stories as $category_name => $category) {
             foreach ($category as $subcategory_name => $subcategory) {
-                $this->generate_story($category_name, $subcategory_name, $subcategory['stories']);
+                foreach ($subcategory['stories'] as $story) {
+                    $this->generate_story($category_name, $subcategory_name, $story);
+                }
             }
         }
     }
 
-    public function generate_story($category_name, $subcategory_name, $stories)
+    public function generate_story($category_name, $subcategory_name, $story)
     {
         $full_title = '';
         if (!Str::isNullOrEmptyString($category_name)) {
             $full_title .= "{$category_name}/";
         }
+
         if (!Str::isNullOrEmptyString($subcategory_name)) {
             $full_title .= "{$subcategory_name}/";
-            $filename = Str::upperCamelCase($subcategory_name) . '.stories.js';
-        } else {
-            $filename = Str::upperCamelCase($category_name) . '.stories.js';
         }
-        $full_title .= "{$stories[0]['title']}";
+        $full_title .= "{$story['title']}";
+        $full_title = rtrim($full_title, "/");
+        $filename = Str::upperCamelCase($story['title']) . '.stories.js';
 
         $examplesOutput = '';
-        foreach ($stories as $story) {
-            $patternTitle = Str::upperCamelCase($story['title']);
-            $examplesOutput .=     'export const ' . $patternTitle . ' = Template.bind({});
+        $patternTitle = Str::upperCamelCase($story['title']);
+        $examplesOutput .=     'export const ' . $patternTitle . ' = Template.bind({});
                                         ' . $patternTitle . '.args = {
                                         storyName: \'' . $story['title'] . '\',
                                         content: ' . json_encode($story['content']) . ',
                                     };
                                     ';
-        }
 
         $output = 'import ShowBlockHtml from \'../components/ShowBlockHtml.vue\';
 				export default {
