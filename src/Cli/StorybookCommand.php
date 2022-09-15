@@ -5,6 +5,7 @@ namespace WpStorybook\Cli;
 use WpStorybook\AcfBlocks\Stories as AcfStories;
 use WpStorybook\GutenbergBlocks\AdminStories;
 use WpStorybook\Helpers\Str;
+use WpStorybook\StoryGenerator\ClassStories;
 
 class StorybookCommand
 {
@@ -26,6 +27,12 @@ class StorybookCommand
     public function admin_stories()
     {
         (new AdminStories())->create_all_stories();
+        \WP_CLI::log('WP admin created stories have been generated.');
+    }
+
+    public function class_stories()
+    {
+        (new ClassStories())->create_all_stories();
         \WP_CLI::log('WP admin created stories have been generated.');
     }
 }
