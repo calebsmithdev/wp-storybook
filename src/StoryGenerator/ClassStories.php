@@ -7,6 +7,7 @@
 
 namespace WpStorybook\StoryGenerator;
 
+use WpStorybook\Helpers\HtmlGenerator;
 use WpStorybook\Helpers\Str;
 
 class ClassStories
@@ -15,6 +16,8 @@ class ClassStories
     protected $storybookStoriesDir;
     protected $taxonomySlug;
     protected $postTypeSlug;
+    protected $headContent;
+    protected $footerContent;
 
     public function __construct()
     {
@@ -22,6 +25,8 @@ class ClassStories
         $this->postTypeSlug = get_option('wpsb_post_type_slug');
         $this->storybookDir = get_option('wpsb_storybook_path');
         $this->storybookStoriesDir = $this->storybookDir . '/class-stories/';
+        $this->headContent = HtmlGenerator::load_head();
+        $this->footerContent = HtmlGenerator::load_footer();
     }
 
     public function create_all_stories()
@@ -43,7 +48,7 @@ class ClassStories
             $stories[$class->category][$class->subcategory]['stories'][] = array(
                 'title' => $storyName,
                 'slug' => sanitize_title($storyName),
-                'content' => $class->render()
+                'content' => $this->get_content($class)
             );
         }
 
@@ -111,5 +116,14 @@ class ClassStories
 				' . $examplesOutput;
 
         file_put_contents($this->storybookStoriesDir . $filename, $output);
+    }
+
+    private function get_content(Stories $class)
+    {
+        $output = $this->headContent;
+        $output .= $class->render();
+        $output .= $this->footerContent;
+
+        return $output;
     }
 }

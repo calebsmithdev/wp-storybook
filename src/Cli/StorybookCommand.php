@@ -33,7 +33,7 @@ class StorybookCommand
     public function class_stories()
     {
         (new ClassStories())->create_all_stories();
-        \WP_CLI::log('WP admin created stories have been generated.');
+        \WP_CLI::log('Class based created stories have been generated.');
     }
 }
 
