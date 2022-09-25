@@ -1,7 +1,12 @@
 {
   "name": "calebsmithdev/wp-storybook",
-  "description": "Add Storybook and generate stories for your WordPress theme.",
+  "description": "Generate Storybook stories for your WordPress theme.",
   "type": "library",
+  "keywords": [
+    "storybook",
+    "wordpress",
+    "stories"
+  ],
   "license": "MIT",
   "authors": [
       {
