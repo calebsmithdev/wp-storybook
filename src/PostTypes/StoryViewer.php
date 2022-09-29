@@ -23,6 +23,7 @@ class StoryViewer
     {
         add_action('init', array($this, 'setup_post_type'), 0);
         add_action('init', array($this, 'register_category_taxonomy'), 0);
+        add_action('save_post', [$this, 'save_post_meta']);
     }
 
     /**
@@ -77,6 +78,7 @@ class StoryViewer
             'exclude_from_search' => true,
             'publicly_queryable'  => true,
             'rewrite'             => false,
+            'register_meta_box_cb' => array($this, 'post_type_meta_meta_box'),
             'capabilities'        => array(
                 'edit_post'          => 'update_core',
                 'read_post'          => 'update_core',
@@ -94,7 +96,7 @@ class StoryViewer
     }
 
     // Register Block Viewer Category Taxonomy
-    function register_category_taxonomy()
+    public function register_category_taxonomy()
     {
 
         $labels = array(
@@ -131,5 +133,57 @@ class StoryViewer
             'show_in_rest' => true
         );
         register_taxonomy($this->taxonomySlug, array($this->postTypeSlug), $args);
+    }
+
+    public function post_type_meta_meta_box()
+    {
+        add_meta_box(
+            'wp-storybook-options',
+            __('Story Options', 'wp-storybook'),
+            [$this, 'render_meta_box'],
+            $this->postTypeSlug,
+            'side',
+        );
+    }
+
+    public function render_meta_box($post)
+    {
+        wp_nonce_field('wp_storybook_meta_nonce', 'wp_storybook_meta_nonce');
+
+        $testingMeta = get_post_meta($post->ID, 'prevent_automated_testing', true);
+
+?>
+        <input type="checkbox" name="prevent_automated_testing" id="prevent_automated_testing" value="1" <?php if (isset($testingMeta)) checked($testingMeta, '1'); ?> />Prevent Automated Testing
+<?php
+    }
+
+    /**
+     * When the post is saved, saves our custom data.
+     *
+     * @param int $post_id
+     */
+    function save_post_meta($post_id)
+    {
+        // Check if our nonce is set.
+        if (!isset($_POST['wp_storybook_meta_nonce'])) {
+            return;
+        }
+
+        // Verify that the nonce is valid.
+        if (!wp_verify_nonce($_POST['wp_storybook_meta_nonce'], 'wp_storybook_meta_nonce')) {
+            return;
+        }
+
+        // If this is an autosave, our form has not been submitted, so we don't want to do anything.
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        /* OK, it's safe for us to save the data now. */
+        if (isset($_POST['prevent_automated_testing'])) {
+            update_post_meta($post_id, 'prevent_automated_testing', '1');
+        } else {
+            update_post_meta($post_id, 'prevent_automated_testing', '0');
+        }
     }
 }

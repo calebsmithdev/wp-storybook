@@ -53,11 +53,17 @@ class AdminStories
             $patterns = ['category' => '', 'patterns' => []];
             while ($query->have_posts()) {
                 $query->the_post();
-                $patterns['patterns'][] = [
+                $new_pattern = [
                     'title' => get_the_title(),
                     'slug' => get_post_field('post_name'),
-                    'content' => apply_filters('the_content', get_post_field('post_content'))
+                    'content' => apply_filters('the_content', get_post_field('post_content')),
+                    'prevent_testing' => false
                 ];
+
+                $prevent_testing = get_post_meta(get_the_ID(), 'prevent_automated_testing', true);
+                $new_pattern['prevent_testing'] = $prevent_testing == '1' ? 'true' :  'false';
+
+                $patterns['patterns'][] = $new_pattern;
             }
 
             $this->generate_story($patterns);
@@ -81,11 +87,17 @@ class AdminStories
             $patterns = ['category' => $term->name, 'patterns' => []];
             while ($termQuery->have_posts()) {
                 $termQuery->the_post();
-                $patterns['patterns'][] = [
+                $new_pattern = [
                     'title' => get_the_title(),
                     'slug' => get_post_field('post_name'),
-                    'content' => apply_filters('the_content', get_post_field('post_content'))
+                    'content' => apply_filters('the_content', get_post_field('post_content')),
+                    'prevent_testing' => false
                 ];
+
+                $prevent_testing = get_post_meta(get_the_ID(), 'prevent_automated_testing', true);
+                $new_pattern['prevent_testing'] = $prevent_testing == '1' ? 'true' :  'false';
+
+                $patterns['patterns'][] = $new_pattern;
             }
             $this->generate_story($patterns);
         }
@@ -145,11 +157,17 @@ class AdminStories
             $patterns = ['category' => '', 'patterns' => []];
             while ($query->have_posts()) {
                 $query->the_post();
-                $patterns['patterns'][] = [
+                $new_pattern = [
                     'title' => get_the_title(),
                     'slug' => get_post_field('post_name'),
-                    'content' => apply_filters('the_content', get_post_field('post_content'))
+                    'content' => apply_filters('the_content', get_post_field('post_content')),
+                    'prevent_testing' => false
                 ];
+
+                $prevent_testing = get_post_meta(get_the_ID(), 'prevent_automated_testing', true);
+                $new_pattern['prevent_testing'] = $prevent_testing == '1' ? 'true' :  'false';
+
+                $patterns['patterns'][] = $new_pattern;
             }
 
             $this->generate_story($patterns);
@@ -173,11 +191,17 @@ class AdminStories
             $patterns = ['category' => $term->name, 'patterns' => []];
             while ($termQuery->have_posts()) {
                 $termQuery->the_post();
-                $patterns['patterns'][] = [
+                $new_pattern = [
                     'title' => get_the_title(),
                     'slug' => get_post_field('post_name'),
-                    'content' => apply_filters('the_content', get_post_field('post_content'))
+                    'content' => apply_filters('the_content', get_post_field('post_content')),
+                    'prevent_testing' => false
                 ];
+
+                $prevent_testing = get_post_meta(get_the_ID(), 'prevent_automated_testing', true);
+                $new_pattern['prevent_testing'] = $prevent_testing == '1' ? 'true' :  'false';
+
+                $patterns['patterns'][] = $new_pattern;
             }
             $this->generate_story($patterns);
         }
@@ -195,6 +219,7 @@ class AdminStories
                                         ' . $patternTitle . '.args = {
                                         storyName: \'' . $pattern['title'] . '\',
                                         content: ' . json_encode($pattern['content']) . ',
+                                        preventTesting: ' . $pattern['prevent_testing'] . '
                                     };
                                     ';
         }

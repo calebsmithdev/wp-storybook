@@ -106,8 +106,8 @@ class Stories
         $defaultOutput = 'export const Default = Template.bind({});';
         $defaultOutput .= 'Default.args = {';
         $defaultOutput .= 'storyName: \'Default\',';
-        if (isset($block['default_storybook'])) {
-            foreach ($block['default_storybook'] as $field => $value) {
+        if (isset($block['defaultStorybook'])) {
+            foreach ($block['defaultStorybook'] as $field => $value) {
                 $defaultOutput .= "\r\n{$field}: '{$value}',";
             }
         }
