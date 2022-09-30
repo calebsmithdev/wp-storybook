@@ -190,7 +190,9 @@ class StoryViewer
 
     public function add_post_type_to_block_meta_data($metadata)
     {
-        $metadata['acf']['postTypes'][] = $this->postTypeSlug;
+        if (isset($metadata['acf']['postTypes'])) {
+            $metadata['acf']['postTypes'][] = $this->postTypeSlug;
+        }
 
         return $metadata;
     }
