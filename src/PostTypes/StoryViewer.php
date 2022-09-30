@@ -24,6 +24,7 @@ class StoryViewer
         add_action('init', array($this, 'setup_post_type'), 0);
         add_action('init', array($this, 'register_category_taxonomy'), 0);
         add_action('save_post', [$this, 'save_post_meta']);
+        add_filter('block_type_metadata', [$this, 'add_post_type_to_block_meta_data']);
     }
 
     /**
@@ -185,5 +186,12 @@ class StoryViewer
         } else {
             update_post_meta($post_id, 'prevent_automated_testing', '0');
         }
+    }
+
+    public function add_post_type_to_block_meta_data($metadata)
+    {
+        $metadata['acf']['postTypes'][] = $this->postTypeSlug;
+
+        return $metadata;
     }
 }
